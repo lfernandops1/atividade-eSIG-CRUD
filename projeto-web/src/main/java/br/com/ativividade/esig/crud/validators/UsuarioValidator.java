@@ -29,7 +29,7 @@ public class UsuarioValidator implements Validator {
                 throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário Inválido", "O nome de usuário deve conter apenas letras e números."));
             }
 
-            if (new PessoaDAO().existsByUsuario(usuario)) {
+            if (new PessoaDAO().verificarUsuario(usuario)) {
                 throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário em Uso", "Este nome de usuário já está em uso."));
             }
         }

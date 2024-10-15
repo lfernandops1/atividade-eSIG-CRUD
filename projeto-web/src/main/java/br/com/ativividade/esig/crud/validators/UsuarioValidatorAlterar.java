@@ -13,44 +13,45 @@ import java.util.regex.Pattern;
 
 import static br.com.ativividade.esig.crud.shared.Constantes.Valores.Validator.ID_PESSOA;
 
-@FacesValidator("EmailValidatorAlterar")
-public class EmailValidatorAlterar implements Validator {
+@FacesValidator("UsuarioValidatorAlterar")
+public class UsuarioValidatorAlterar implements Validator {
 
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         if (value == null) {
             throw new ValidatorException(new FacesMessage(
-                    FacesMessage.SEVERITY_ERROR, "E-mail Inválido", "O e-mail não pode ser nulo."
+                    FacesMessage.SEVERITY_ERROR, "Usuário Inválido", "O nome de usuário não pode ser nulo."
             ));
         }
 
-        String email = (String) value;
+        String usuario = (String) value;
 
-        if (!estaNuloOuVazio(email)) {
-            if (!isEmailValid(email)) {
+        if (!estaNuloOuVazio(usuario)) {
+            if (!isUsuarioValid(usuario)) {
                 throw new ValidatorException(new FacesMessage(
-                        FacesMessage.SEVERITY_ERROR, "E-mail Inválido", "Formato de e-mail inválido."
+                        FacesMessage.SEVERITY_ERROR, "Usuário Inválido",
+                        "O nome de usuário deve conter apenas letras e números."
                 ));
             }
 
             Integer idAtual = (Integer) component.getAttributes().get(ID_PESSOA);
-            if (new PessoaDAO().verificarEmailComId(email, idAtual)) {
+            if (new PessoaDAO().verificarUsuarioComId(usuario, idAtual)) {
                 throw new ValidatorException(new FacesMessage(
-                        FacesMessage.SEVERITY_ERROR, "E-mail em Uso",
-                        "Este e-mail já está sendo utilizado por outra pessoa."
+                        FacesMessage.SEVERITY_ERROR, "Usuário em Uso",
+                        "Este nome de usuário já está em uso por outra pessoa."
                 ));
             }
         }
     }
 
-    private static boolean isEmailValid(String email) {
-        String expression = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+    private static boolean isUsuarioValid(String usuario) {
+        String expression = "^[a-zA-Z0-9]+$";
         Pattern pattern = Pattern.compile(expression);
-        Matcher matcher = pattern.matcher(email);
+        Matcher matcher = pattern.matcher(usuario);
         return matcher.matches();
     }
 
-    private boolean estaNuloOuVazio(String value) {
+    private static boolean estaNuloOuVazio(String value) {
         return value == null || value.trim().isEmpty();
     }
 }

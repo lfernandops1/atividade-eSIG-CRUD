@@ -38,6 +38,10 @@ public interface Queries {
         String QUERY_VERIFICAR_EMAIL_NAO_UTILIZADO = "SELECT COUNT(*) FROM atividade.pessoa WHERE email = ?";
         String QUERY_VERIFICAR_TELEFONE_NAO_UTILIZADO = "select count(*) from atividade.pessoa where telefone = ?;";
         String QUERY_VERIFICAR_USUARIO_NAO_UTILIZADO = "select count(*) from atividade.pessoa where usuario = ? ";
+        String QUERY_VERIFICAR_TELEFONE_NAO_UTILIZADO_COM_ID = "SELECT COUNT(*) FROM atividade.pessoa WHERE telefone = ? AND id != ?";
+        String QUERY_VERIFICAR_EMAIL_NAO_UTILIZADO_COM_ID = "SELECT COUNT(*) FROM atividade.pessoa WHERE email = ? AND id != ?";
+        String QUERY_VERIFICAR_USUARIO_NAO_UTILIZADO_COM_ID = "SELECT COUNT(*) FROM atividade.pessoa WHERE usuario = ? AND id != ?";
+
     }
 
     interface Sessao {

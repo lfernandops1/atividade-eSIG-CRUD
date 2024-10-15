@@ -66,7 +66,9 @@
                 <p:inputText id="usuario" value="#{sessaoMB.usuarioSessao.pessoa.usuario}" required="true"
                              disabled="true"
                              requiredMessage="Usuário é um campo obrigatório!"
+                             validator="UsuarioValidatorAlterar"
                              styleClass="input-field"/>
+                <f:attribute name="idPessoa" value="#{sessaoMB.usuarioSessao.pessoa.id}"/>
 
                 <p:outputLabel value="Data de Nascimento:" for="dataNascimento"/>
                 <p:calendar id="dataNascimento" value="#{sessaoMB.usuarioSessao.pessoa.dataNascimento}"
@@ -78,6 +80,7 @@
                 <p:inputText id="email" value="#{sessaoMB.usuarioSessao.pessoa.email}" required="true"
                              validator="EmailValidatorAlterar" requiredMessage="Email é um campo obrigatório!"
                              maxlength="50" styleClass="input-field">
+                    <f:attribute name="idPessoa" value="#{sessaoMB.usuarioSessao.pessoa.id}"/>
                     <p:ajax update="msgEditar"/>
                 </p:inputText>
 
@@ -85,6 +88,7 @@
                 <p:inputMask id="telefone" mask="(99) 9 9999-9999"
                              validator="TelefoneValidatorAlterar"
                              value="#{sessaoMB.usuarioSessao.pessoa.telefone}" styleClass="input-field"/>
+                <f:attribute name="idPessoa" value="#{sessaoMB.usuarioSessao.pessoa.id}"/>
             </h:panelGrid>
 
             <h:panelGroup layout="block" class="button-group" style="margin-top: 20px;">

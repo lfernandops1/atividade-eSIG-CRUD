@@ -32,7 +32,7 @@ public class TelefoneValidator implements Validator {
                 throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Telefone Inválido", "Formato de telefone inválido."));
             }
 
-            if (new PessoaDAO().existsByTelefone(retirarMascara(telefoneSemMascara))) {
+            if (new PessoaDAO().verificarTelefoneExistente(retirarMascara(telefoneSemMascara))) {
                 throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Telefone em Uso", "Este telefone já está sendo utilizado."));
             }
         }

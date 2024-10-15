@@ -1,8 +1,6 @@
 package br.com.ativividade.esig.crud.validators;
 
 import br.com.ativividade.esig.crud.DAO.PessoaDAO;
-import br.com.ativividade.esig.crud.model.Usuario;
-import br.com.ativividade.esig.crud.util.SessaoUtil;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -13,7 +11,6 @@ import javax.faces.validator.ValidatorException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static br.com.ativividade.esig.crud.shared.Constantes.Constantes.mensagems.*;
 import static br.com.ativividade.esig.crud.util.VerificadorUtil.estaNuloOuVazio;
 
 @FacesValidator("EmailValidator")
@@ -35,7 +32,7 @@ public class EmailValidator implements Validator {
             }
 
             // Verifica se o email já está em uso
-            if (new PessoaDAO().existsByEmail(email)) {
+            if (new PessoaDAO().verificarEmailExistente(email)) {
                 throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email em Uso", "Este email já está sendo utilizado."));
             }
         }

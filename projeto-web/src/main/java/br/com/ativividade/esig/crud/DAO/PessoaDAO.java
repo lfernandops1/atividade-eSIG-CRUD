@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static br.com.ativividade.esig.crud.configuration.DatabaseConnection.getConnection;
-import static br.com.ativividade.esig.crud.shared.Constantes.Constantes.mensagems.*;
+import static br.com.ativividade.esig.crud.shared.Constantes.Constantes.mensagems.ERRO_LISTAR_PESSOAS;
+import static br.com.ativividade.esig.crud.shared.Constantes.Constantes.mensagems.NENHUM_ID_RETORNADO_AO_CADASTRAR;
 import static br.com.ativividade.esig.crud.shared.Constantes.Queries.Pessoa.*;
 import static br.com.ativividade.esig.crud.shared.Constantes.Valores.Pessoa.*;
 import static br.com.ativividade.esig.crud.util.SenhaUtil.gerarSenha;
@@ -165,15 +166,27 @@ public class PessoaDAO {
         }
     }
 
-    public boolean existsByEmail(String email) {
+    public boolean verificarEmailExistente(String email) {
+        return verificarEmail(QUERY_VERIFICAR_EMAIL_NAO_UTILIZADO, email, null);
+    }
+
+    public boolean verificarEmailComId(String email, Integer id) {
+        return verificarEmail(QUERY_VERIFICAR_EMAIL_NAO_UTILIZADO_COM_ID, email, id);
+    }
+
+    private boolean verificarEmail(String query, String email, Integer id) {
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(QUERY_VERIFICAR_EMAIL_NAO_UTILIZADO)) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, email);
+            if (id != null) {
+                stmt.setInt(2, id);
+            }
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     int count = rs.getInt(1);
-                    System.out.println(CONTAGEM_EMAILS + count);
+                    System.out.println("Contagem de emails: " + count);
                     return count > 0;
                 }
             }
@@ -183,14 +196,20 @@ public class PessoaDAO {
         return false;
     }
 
-    public boolean existsByTelefone(String telefone) {
+    private boolean verificarTelefone(String query, String telefone, Integer id) {
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(QUERY_VERIFICAR_TELEFONE_NAO_UTILIZADO)) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, telefone);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
+
+            stmt.setInt(2, id != null ? id : -1);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1);
+                    System.out.println("Contagem de telefones: " + count);
+                    return count > 0;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -198,13 +217,36 @@ public class PessoaDAO {
         return false;
     }
 
-    public boolean existsByUsuario(String usuario) {
+    public boolean verificarTelefoneExistente(String telefone) {
+        return verificarTelefone(QUERY_VERIFICAR_TELEFONE_NAO_UTILIZADO, telefone, null);
+    }
+
+    public boolean verificarTelefoneComId(String telefone, Integer id) {
+        return verificarTelefone(QUERY_VERIFICAR_TELEFONE_NAO_UTILIZADO_COM_ID, telefone, id);
+    }
+
+
+    public boolean verificarUsuario(String usuario) {
+        return verificarUsuario(QUERY_VERIFICAR_USUARIO_NAO_UTILIZADO, usuario, null);
+    }
+
+    public boolean verificarUsuarioComId(String usuario, Integer id) {
+        return verificarUsuario(QUERY_VERIFICAR_USUARIO_NAO_UTILIZADO_COM_ID, usuario, id);
+    }
+
+    private boolean verificarUsuario(String query, String usuario, Integer id) {
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(QUERY_VERIFICAR_USUARIO_NAO_UTILIZADO)) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
             stmt.setString(1, usuario);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
+            if (id != null) {
+                stmt.setInt(2, id);
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

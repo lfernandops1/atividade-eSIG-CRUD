@@ -54,4 +54,8 @@ public interface Valores {
         String VALOR = "valor";
         String TIPO = "tipo";
     }
+
+    interface Validator {
+        String ID_PESSOA = "idPessoa";
+    }
 }
