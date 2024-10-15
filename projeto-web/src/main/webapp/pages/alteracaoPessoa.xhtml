@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/template/templateGeral.xhtml">
+    <h:outputStylesheet library="css" name="StyleGeral.css"/>
+
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{pessoaController.carregarCargos()}"/>
+    </f:metadata>
+
+    <ui:define name="title">Editar Pessoa</ui:define>
+
+    <ui:define name="conteudo">
+        <h:form id="formEditarUsuario" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+
+            <p:growl id="msgEditar" showDetail="true"/>
+
+            <h2>Sistema de Edição de Usuários</h2>
+
+            <div id="textos" style="text-align: center; margin-top: 10px;">
+                <p:outputLabel style="font-size: 1.5em;">
+                    "Edição de Dados do Usuário"
+                </p:outputLabel>
+            </div>
+
+            <h:panelGrid id="pnlEditar" class="panel-grid" columns="2" cellpadding="10"
+                         style="display: flex; justify-content: center; gap: 10px;">
+
+                <!-- Campos de Edição -->
+                <div style="align-content: normal">
+                    <p:outputLabel value="Nome:" for="nome"/>
+                    <p:inputText id="nome" value="#{sessaoMB.usuarioSessao.pessoa.nome}" required="true"
+                                 requiredMessage="Nome é um campo obrigatório!" styleClass="input-field"/>
+                </div>
+                <p:outputLabel value="Cidade:" for="cidade"/>
+                <p:inputText id="cidade" value="#{sessaoMB.usuarioSessao.pessoa.cidade}" required="true"
+                             requiredMessage="Cidade é um campo obrigatório!" styleClass="input-field"/>
+
+                <p:outputLabel value="Cargo:" for="cargo"/>
+                <p:selectOneMenu id="cargo" value="#{sessaoMB.usuarioSessao.pessoa.cargo}"
+                                 converter="cargoConverter" filter="true" filterMatchMode="startsWith"
+                                 styleClass="input-field">
+                    <f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
+                    <f:selectItems var="cargo" value="#{pessoaController.listaCargos}"
+                                   itemLabel="#{cargo.nome}" itemValue="#{cargo}"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel value="CEP:" for="cep"/>
+                <p:inputMask id="cep" value="#{sessaoMB.usuarioSessao.pessoa.cep}" required="true"
+                             mask="99999-999" requiredMessage="CEP é um campo obrigatório!" styleClass="input-field"/>
+
+                <p:outputLabel value="Endereço:" for="endereco"/>
+                <p:inputText id="endereco" value="#{sessaoMB.usuarioSessao.pessoa.endereco}" required="true"
+                             requiredMessage="Endereço é um campo obrigatório!" styleClass="input-field"/>
+
+                <p:outputLabel value="País:" for="pais"/>
+                <p:inputText id="pais" value="#{sessaoMB.usuarioSessao.pessoa.pais}" required="true"
+                             requiredMessage="País é um campo obrigatório!" styleClass="input-field"/>
+
+                <p:outputLabel value="Usuário:" for="usuario"/>
+                <p:inputText id="usuario" value="#{sessaoMB.usuarioSessao.pessoa.usuario}" required="true"
+                             disabled="true"
+                             requiredMessage="Usuário é um campo obrigatório!"
+                             styleClass="input-field"/>
+
+                <p:outputLabel value="Data de Nascimento:" for="dataNascimento"/>
+                <p:calendar id="dataNascimento" value="#{sessaoMB.usuarioSessao.pessoa.dataNascimento}"
+                            pattern="dd/MM/yyyy" mask="true" locale="pt"
+                            maxdate="#{pessoaController.dataMaxima}" converter="localDateConverter"
+                            styleClass="input-field"/>
+
+                <p:outputLabel value="Email:" for="email"/>
+                <p:inputText id="email" value="#{sessaoMB.usuarioSessao.pessoa.email}" required="true"
+                             validator="EmailValidatorAlterar" requiredMessage="Email é um campo obrigatório!"
+                             maxlength="50" styleClass="input-field">
+                    <p:ajax update="msgEditar"/>
+                </p:inputText>
+
+                <p:outputLabel value="Telefone:" for="telefone"/>
+                <p:inputMask id="telefone" mask="(99) 9 9999-9999"
+                             validator="TelefoneValidatorAlterar"
+                             value="#{sessaoMB.usuarioSessao.pessoa.telefone}" styleClass="input-field"/>
+            </h:panelGrid>
+
+            <h:panelGroup layout="block" class="button-group" style="margin-top: 20px;">
+                <p:commandButton value="Salvar Alterações"
+                                 action="#{pessoaController.alterar(sessaoMB.usuarioSessao.pessoa)}"
+                                 update=":formEditarUsuario:msgEditar, formSenhaGerada:senhaGerada"
+                                 oncomplete="if (!args.validationFailed) { PF('dlgSenhaGerada').show(); }"/>
+                <p:commandButton value="Cancelar" onclick="history.back();" type="button"
+                                 style="margin-left: 10px;"/>
+            </h:panelGroup>
+        </h:form>
+
+        <p:dialog id="dlgSenhaGerada" widgetVar="dlgSenhaGerada" modal="true" header="Senha Gerada"
+                  resizable="false" closable="true">
+            <h:form id="formSenhaGerada">
+                <h:panelGrid>
+                    <p:outputLabel value="Senha Gerada:"/>
+                    <p:outputLabel id="senhaGerada" value="#{pessoaController.senhaGerada}"/>
+                </h:panelGrid>
+                <p:commandButton value="Fechar" onclick="PF('dlgSenhaGerada').hide();"/>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>
+</html>

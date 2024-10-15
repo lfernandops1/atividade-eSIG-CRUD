@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <meta charset="UTF-8"/>
+</h:head>
+
+<p:dialog id="modalCadastrarPessoa" dynamic="true" widgetVar="dlgCadastrarPessoa"
+          header="Cadastrar Pessoa" width="auto" height="auto"
+          closable="true" resizable="false" modal="true">
+
+
+    <h:form id="formCadastrar">
+        <p:growl id="msgCad" showDetail="true"/>
+        <h:panelGrid id="pnlCadastrar">
+            <p:outputLabel value="Nome: "><span style="color: red;">*</span></p:outputLabel>
+            <p:inputText id="nome" value="#{pessoaController.pessoa.nome}" required="true"
+                         requiredMessage="Nome é um campo obrigatório!"/>
+            <p:message for="nome"/>
+
+            <p:outputLabel value="Cargo: "/>
+            <p:selectOneMenu id="cargo" value="#{pessoaController.pessoa.cargo}" filter="true"
+                             converter="cargoConverter" filterMatchMode="startsWith">
+                <f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
+                <f:selectItems var="cargo" value="#{pessoaController.listaCargos}"
+                               itemLabel="#{cargo.nome}" itemValue="#{cargo}"/>
+            </p:selectOneMenu>
+
+            <p:outputLabel value="País: "><span style="color: red;">*</span></p:outputLabel>
+            <p:inputText id="pais" value="#{pessoaController.pessoa.pais}" required="true"
+                         requiredMessage="País é um campo obrigatório!"/>
+            <p:message for="pais"/>
+
+            <p:outputLabel value="CEP: "><span style="color: red;">*</span></p:outputLabel>
+            <p:inputMask id="cep" mask="99999-999" value="#{pessoaController.pessoa.cep}" required="true"
+                         requiredMessage="CEP é um campo obrigatório!"/>
+            <p:message for="cep"/>
+
+            <p:outputLabel value="Cidade: "><span style="color: red;">*</span></p:outputLabel>
+            <p:inputText id="cidade" value="#{pessoaController.pessoa.cidade}" required="true"
+                         requiredMessage="Cidade é um campo obrigatório!"/>
+            <p:message for="cidade"/>
+
+            <p:outputLabel value="Endereço: "><span style="color: red;">*</span></p:outputLabel>
+            <p:inputText id="endereco" value="#{pessoaController.pessoa.endereco}" required="true"
+                         requiredMessage="Endereço é um campo obrigatório!"/>
+            <p:message for="endereco"/>
+
+            <p:outputLabel value="Usuário: "><span style="color: red;">*</span></p:outputLabel>
+            <p:inputText id="usuario" value="#{pessoaController.pessoa.usuario}" required="true"
+                         validator="UsuarioValidator"
+                         requiredMessage="Usuário é um campo obrigatório!"/>
+            <p:message for="usuario"/>
+
+            <p:outputLabel value="Data de Nascimento:"/>
+            <p:calendar locale="pt" validator="DataMenorQueAtualValidator"
+                        converter="localDateConverter" maxdate="#{pessoaController.dataMaxima}"
+                        value="#{pessoaController.pessoa.dataNascimento}" pattern="dd/MM/yyyy" mask="true"/>
+
+            <p:outputLabel value="Email:"><span style="color: red;">*</span></p:outputLabel>
+            <p:inputText id="email" validator="EmailValidator" required="true"
+                         requiredMessage="Email é obrigatório"
+                         value="#{pessoaController.pessoa.email}" maxlength="50">
+                <p:ajax update="msgCad"/>
+            </p:inputText>
+            <p:message for="email"/>
+
+            <p:outputLabel value="Telefone:"/>
+            <p:inputMask id="telefone" mask="(99) 9 9999-9999" maxlength="11"
+                         validator="TelefoneValidator"
+                         value="#{pessoaController.pessoa.telefone}"/>
+
+            <div class="center">
+                <p:commandButton value="Cadastrar" action="#{pessoaController.cadastrar()}"
+                                 update="formCadastrar:msgCad, formSenhaGerada:senhaGerada"
+                                 oncomplete="if (!args.validationFailed) { PF('dlgCadastrarPessoa').hide(); PF('dlgSenhaGerada').show(); }"/>
+            </div>
+        </h:panelGrid>
+    </h:form>
+</p:dialog>
+
+<p:dialog id="dlgSenhaGerada" widgetVar="dlgSenhaGerada" modal="true" header="Senha Gerada" resizable="false"
+          closable="true">
+    <h:form id="formSenhaGerada">
+        <h:panelGrid>
+            <p:outputLabel value="Senha Gerada:"/>
+            <p:outputLabel id="senhaGerada" value="#{pessoaController.senhaGerada}"/>
+        </h:panelGrid>
+        <p:commandButton value="Fechar" onclick="PF('dlgSenhaGerada').hide();"/>
+    </h:form>
+</p:dialog>
+
+
+</html>

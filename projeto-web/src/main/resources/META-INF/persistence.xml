@@ -1,0 +1,25 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+     http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+
+    <persistence-unit name="projetoPU">
+        <class>br.com.ativividade.esig.crud.model.Usuario</class>
+        <class>br.com.ativividade.esig.crud.model.Pessoa</class>
+        <class>br.com.ativividade.esig.crud.model.PessoaSalarioConsolidado</class>
+        <class>br.com.ativividade.esig.crud.model.Cargo</class>
+        <class>br.com.ativividade.esig.crud.model.Usuario</class>
+        <class>br.com.ativividade.esig.crud.model.Vencimento</class>
+        <properties>
+            <!-- Configurações das propriedades JDBC/JPA -->
+            <property name="javax.persistence.jdbc.url"
+                      value="jdbc:postgresql://localhost:5432/esig"/>
+            <property name="javax.persistence.jdbc.user"
+                      value="postgres"/>
+            <property name="javax.persistence.jdbc.password"
+                      value="post"/>
+
+        </properties>
+    </persistence-unit>
+</persistence>

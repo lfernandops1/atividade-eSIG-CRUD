@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="/template/templateGeral.xhtml">
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{consolidacaoMB.listarSalarios()}"/>
+    </f:metadata>
+    <ui:define name="title">
+        Tela de Listagem de Salários
+    </ui:define>
+
+    <ui:define name="conteudo">
+        <h:form id="form">
+            <div align="center" style="margin-top: 20px">
+                <p:outputLabel value="Sistema de Controle de Salários" style="font-size: 2em; font-family: auto;"/>
+                <div id="textos" align="center" style="margin-top: 10px">
+                    <p:outputLabel style="font-size: 1.5em; font-family: auto;">
+                        "Listagem de Salários Consolidados"
+                    </p:outputLabel>
+                </div>
+
+                <p:commandButton value="Recalcular Salários" action="#{consolidacaoMB.recalcularSalarios}"
+                                 update="tabela"/>
+
+                <p:commandButton value="Alterar Dados"
+                                 action="#{sessaoMB.redirecionarParaAlteracao()}"
+                                 immediate="true"
+                />
+
+                <p:dataTable id="tabela" var="pessoa" value="#{consolidacaoMB.pessoas}" style="margin-top: 20px">
+                    <p:column headerText="Nome">
+                        <p:outputLabel value="#{pessoa.pessoa.nome}"/> <!-- Ajustado para refletir o campo correto -->
+                    </p:column>
+                    <p:column headerText="Cargo">
+                        <p:outputLabel value="#{pessoa.cargo.nome}"/> <!-- Ajustado para refletir o campo correto -->
+                    </p:column>
+                    <p:column headerText="Salário">
+                        <p:outputLabel value="R$#{pessoa.salario}0"/>
+                    </p:column>
+                </p:dataTable>
+            </div>
+
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>
